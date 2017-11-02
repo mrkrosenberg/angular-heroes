@@ -5,16 +5,19 @@ import { Location }                 from '@angular/common';
 
 import { Hero }         from './hero';
 import { HeroService }  from './hero.service';
+
 @Component({
   templateUrl: './hero-detail.component.html',
-  styleUrls: [ './hero-detail.component.css' ]
+  styleUrls: [ './hero-detail.component.css' ],
+  selector: 'app-hero-detail'
 })
 export class HeroDetailComponent implements OnInit {
   hero: Hero;
 
   constructor(
     private heroService: HeroService,
-    private location: Location
+    private location: Location,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -25,5 +28,9 @@ export class HeroDetailComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  saveHero(name: string): void {
+    this.heroService.saveHero(name);
   }
 }

@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var mock_heroes_1 = require("./mock-heroes");
 var HeroService = (function () {
     function HeroService() {
     }
     HeroService.prototype.getHeroes = function () {
-        return Promise.resolve(HEROES);
+        return Promise.resolve(mock_heroes_1.HEROES);
     };
     HeroService.prototype.getHeroesSlowly = function () {
         var _this = this;
@@ -23,6 +24,19 @@ var HeroService = (function () {
     HeroService.prototype.getHero = function (id) {
         return this.getHeroes()
             .then(function (heroes) { return heroes.find(function (hero) { return hero.id === id; }); });
+    };
+    HeroService.prototype.deleteHero = function (id) {
+        var heroToDelete = mock_heroes_1.HEROES.find(function (hero) { return hero.id === id; });
+        mock_heroes_1.HEROES.splice(mock_heroes_1.HEROES.indexOf(heroToDelete), 1);
+    };
+    HeroService.prototype.saveHero = function (name) {
+        var nextId = mock_heroes_1.HEROES.reduce(function (prev, current) { return (prev.id > current.id) ? prev : current; }).id + 1;
+        console.log(nextId);
+        var newHero = {
+            name: name,
+            id: nextId
+        };
+        mock_heroes_1.HEROES.push(newHero);
     };
     return HeroService;
 }());
