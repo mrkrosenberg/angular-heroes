@@ -6,12 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var mock_heroes_1 = require("./mock-heroes");
 var core_1 = require("@angular/core");
 var HeroService = (function () {
     function HeroService() {
+        // saves HEROES as a new variable in this service so it can be manipulated without changing HEROES
+        this.heroes = mock_heroes_1.HEROES;
     }
     HeroService.prototype.getHeroes = function () {
-        return Promise.resolve(HEROES);
+        // this will return a successful promise containing the list of heroes that is specific to this service (maniuplatable)
+        return Promise.resolve(this.heroes);
     };
     HeroService.prototype.getHeroesSlowly = function () {
         var _this = this;
@@ -23,6 +27,15 @@ var HeroService = (function () {
     HeroService.prototype.getHero = function (id) {
         return this.getHeroes()
             .then(function (heroes) { return heroes.find(function (hero) { return hero.id === id; }); });
+    };
+    // deleteHero function expects a promise to be returned (after getHeroes is called from within)
+    // and that promise to be an array of heroes. 
+    HeroService.prototype.deleteHero = function (id) {
+        // takes heroes, changes its value to the list of heroes after the one with specified
+        // id has been filtered out
+        this.heroes = this.heroes.filter(function (hero) { return hero.id !== id; });
+        // returns the value from getHeroes()
+        return this.getHeroes();
     };
     return HeroService;
 }());
